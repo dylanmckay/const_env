@@ -8,3 +8,9 @@ use proc_macro::TokenStream;
 pub fn from_env(attr: TokenStream, item: TokenStream) -> TokenStream {
     const_env_impl::from_env(attr.into(), item.into(), RealEnv {}).into()
 }
+
+/// Return the value of an environment variable as a constant literal.
+#[proc_macro]
+pub fn value_from_env(item: TokenStream) -> TokenStream {
+    const_env_impl::value_from_env(item.into(), RealEnv {}).into()
+}

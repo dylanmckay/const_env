@@ -82,6 +82,42 @@ pub fn from_env(attr: TokenStream, item: TokenStream, read_env: impl ReadEnv) ->
     }
 }
 
+/// Inner implementation details of `const_env::value_from_env`.
+pub fn value_from_env(item: TokenStream, read_env: impl ReadEnv) -> TokenStream {
+    let expr_type: syn::ExprType = syn::parse2(item)
+        .expect("Unable to parse environment variable name as expression");
+    let var_name = match &*expr_type.expr {
+        Expr::Lit(syn::ExprLit { lit: syn::Lit::Str(var_name), .. }) => var_name.value(),
+        invalid_expr => panic!("expected a string literal containing an environment variable name but got '{:?}'", invalid_expr),
+    };
+
+    let var_value = match read_env.read_env(&var_name) {
+        Some(val) => val,
+        None => panic!("no value available for environment variable '{}'", var_name),
+    };
+
+    let span = expr_type.span();
+
+    let type_name = match &*expr_type.ty {
+        syn::Type::Path(p) => {
+            match p.path.get_ident() {
+                Some(ident) => ident.to_string(),
+                None => panic!("expected a type with no path separators but got '{:?}'", p),
+            }
+        },
+        unsupported_ty => panic!("unsupported type for environment variable substitution: {:?}", unsupported_ty),
+    };
+
+    let new_expr = match &type_name[..] {
+        "u8" | "u16" | "u32" | "u64" | "usize" |
+            "i8" | "i16" | "i32" | "i64" | "isize" => {
+            syn::parse2::<syn::LitInt>(format!("{}{}", var_value, type_name).parse().unwrap()).unwrap() // add type suffix on interger literals
+        },
+        unsupported_type => panic!("unsupported type for environment variable substitution: '{}'", unsupported_type),
+    };
+    quote_spanned!(span => #new_expr)
+}
+
 fn extract_var_name(attr: TokenStream, default: String) -> String {
     if attr.is_empty() {
         return default;
