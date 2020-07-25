@@ -1,14 +1,10 @@
 [package]
-name = "const_env"
+name = "const_env--value"
 version = "0.1.2"
-authors = ["Drake Tetreault <ekardnt@ekardnt.com>"]
+authors = ["Drake Tetreault <ekardnt@ekardnt.com>", "Dylan McKay <me@dylanmckay.io>"]
 edition = "2018"
 description = "Configure const and static items by environment variables."
-homepage = "https://github.com/EkardNT/const_env"
-repository = "https://github.com/EkardNT/const_env"
 readme = "README.md"
-keywords = ["env", "envvar", "environment", "variable"]
-categories = ["development-tools::build-utils", "config"]
 license = "CC0-1.0"
 
 [lib]
@@ -16,9 +12,9 @@ proc_macro = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[dependencies.const_env_impl]
+[dependencies.const_env_impl--value]
 version = "=0.1.2"
 path = "../const_env_impl"
 
 [dev-dependencies]
-compiletest_rs = { version = "*", features = ["stable"] }
+compiletest_rs = { version = "0.5", features = ["stable"] }

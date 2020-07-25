@@ -1,4 +1,7 @@
+#![allow(non_snake_case)]
+
 extern crate proc_macro;
+extern crate const_env_impl__value as const_env_impl;
 
 use const_env_impl::RealEnv;
 use proc_macro::TokenStream;

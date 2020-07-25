@@ -1,4 +1,4 @@
-extern crate const_env;
+extern crate const_env__value as const_env;
 
 use const_env::value_from_env;
 
