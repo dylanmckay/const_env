@@ -1,5 +1,8 @@
 # const_env
 
+**NOTE**: This is a small fork which adds a macro for retrieving the environment variable values as an expression.
+It should be upstreamed, this crate is temporary and will not be updated.
+
 - [Motivation](#motivation)
 - [Usage](#usage)
 - [Supported Types](#supported-types)
